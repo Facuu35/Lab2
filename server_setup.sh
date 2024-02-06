@@ -17,7 +17,7 @@ sudo chown -R ubuntu:ubuntu /var/www
 sudo rm /var/www/html/index.html
 
 # Clone GitHub repository for lab-2b
-git clone https://github.com/your_username/lab-2b.git /var/www/lab-2b
+git clone https://github.com/Facuu35/Lab2.git
 
 # Create symbolic html link for cloned GitHub repo
 sudo ln -s /var/www/lab-2b /var/www/html
