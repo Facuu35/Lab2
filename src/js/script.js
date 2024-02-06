@@ -5,6 +5,8 @@ const filterCompletedCheckbox = document.getElementById('filterCompleted');
 sortByDateCheckbox.addEventListener('change', toggleAndRenderTasks);
 filterCompletedCheckbox.addEventListener('change', toggleAndRenderTasks);
 
+let tasks = []; // Initialize an empty array
+
 /*GENERAL*/
 class Task {
     constructor({ text, date, done, id }) {
@@ -41,13 +43,6 @@ class Task {
 
 }
 
-function toggleAndRenderTasks() {
-    tasks.forEach(task => {
-        task.toggle();
-    });
-    renderTasks();
-}
-
 function updateStorage() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
@@ -58,14 +53,23 @@ function readStorage() {
 }
 
 function toggleAndRenderTasks() {
+    tasks.forEach(task => {
+        task.toggle();
+    });
+    renderTasks();
+}
+
+function toggleAndRenderTasks() {
     const sortByDateChecked = sortByDateCheckbox.checked;
     const filterCompletedChecked = filterCompletedCheckbox.checked;
 
-    let filteredTasks = tasks;
+    let filteredTasks = tasks.slice(); // Create a copy to avoid modifying the original array
 
     if (filterCompletedChecked) {
-        // Filter out completed tasks
-        filteredTasks = filteredTasks.filter(task => !task.done);
+        // Toggle tasks only if filterCompletedCheckbox is checked
+        filteredTasks.forEach(task => {
+            task.toggle();
+        });
     }
 
     if (sortByDateChecked) {
@@ -80,11 +84,13 @@ function renderTasks(tasksToRender) {
     const tasksContainer = document.querySelector('.task-container');
     tasksContainer.innerHTML = '';
 
-    tasksToRender.forEach(task => {
-        const taskElement = document.createElement('div');
-        taskElement.innerHTML = task.toHTML();
-        tasksContainer.appendChild(taskElement);
-    });
+    if (tasksToRender) {
+        tasksToRender.forEach(task => {
+            const taskElement = document.createElement('div');
+            taskElement.innerHTML = task.toHTML();
+            tasksContainer.appendChild(taskElement);
+        });
+    }
 }
 
 function createTask() {
